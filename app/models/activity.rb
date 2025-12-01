@@ -1,5 +1,6 @@
 class Activity < ApplicationRecord
   belongs_to :creator, class_name: "User", foreign_key: "user_id"
+  belongs_to :activity_type
   has_many :participant_records, class_name: "Participant", dependent: :delete_all
   has_many :participants, through: :participant_records, source: :user
   has_many :messages
