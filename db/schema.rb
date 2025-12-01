@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_09_180233) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_01_123952) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,7 +27,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_180233) do
     t.integer "maximum_age", null: false
     t.integer "activity_type", default: 0, null: false
     t.integer "status", default: 0, null: false
+    t.bigint "activity_type_id", null: false
+    t.index ["activity_type_id"], name: "index_activities_on_activity_type_id"
     t.index ["user_id"], name: "index_activities_on_user_id"
+  end
+
+  create_table "activity_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "jwt_denylist", force: :cascade do |t|
@@ -80,6 +88,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_180233) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "activities", "activity_types"
   add_foreign_key "activities", "users"
   add_foreign_key "messages", "activities"
   add_foreign_key "messages", "users"
