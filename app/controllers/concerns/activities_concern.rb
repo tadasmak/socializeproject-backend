@@ -7,7 +7,7 @@ module ActivitiesConcern
 
   def activities_remain?(params)
     next_activity_params = params
-    next_page = next_activity_params["page"].presence&.to_i + 1 || 1
+    next_page = (next_activity_params["page"].presence&.to_i || 1) + 1
     limit = next_activity_params["limit"].presence&.to_i || 10
 
     next_activity_params["offset"] = calculate_offset(next_page, limit)
