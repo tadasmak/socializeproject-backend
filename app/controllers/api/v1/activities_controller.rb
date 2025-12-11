@@ -29,7 +29,11 @@ class Api::V1::ActivitiesController < ApplicationController
 
   def create
     ActiveRecord::Base.transaction do
-      @activity = Activity.create!(activity_params.merge(user_id: current_user.id))
+      attrs = activity_params.to_h
+      type_name = attrs.delete("activity_type_name")
+      activity_type = ActivityType.find_by!(name: type_name)
+
+      @activity = Activity.create!(attrs.merge(user_id: current_user.id, activity_type:))
 
       @activity.participant_records.create!(user: current_user)
     end
@@ -135,7 +139,7 @@ class Api::V1::ActivitiesController < ApplicationController
   end
 
   def permitted_activity_attributes
-    [ :title, :description, :location, :start_time, :max_participants, :minimum_age, :maximum_age ]
+    [ :title, :description, :location, :start_time, :max_participants, :minimum_age, :maximum_age, :activity_type_name ]
   end
 
   def render_validation_errors(exception)
