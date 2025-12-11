@@ -1,3 +1,6 @@
+DESCRIPTION_MIN_LENGTH = Activities::BusinessRules::DescriptionLengthRule::MIN_LENGTH
+DESCRIPTION_MAX_LENGTH = Activities::BusinessRules::DescriptionLengthRule::MAX_LENGTH
+
 class GenerateDescriptionJob < ApplicationJob
   queue_as :default
 
@@ -19,7 +22,8 @@ class GenerateDescriptionJob < ApplicationJob
               and the upcoming start time in a natural way. The tone should be personal, informal, welcoming, positive, and inclusive, suitable
               for a community of people looking to make friends by participating in activities together.
 
-              Please generate the description in the language the context is provided in. Only keep the generated description in the text."
+              Please generate the description in the language the context is provided in. Only keep the generated description in the text.
+              Use between #{DESCRIPTION_MIN_LENGTH} and #{DESCRIPTION_MAX_LENGTH} symbols"
 
     response = HTTParty.post("https://api.groq.com/openai/v1/chat/completions",
       headers: {

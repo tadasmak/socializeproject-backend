@@ -12,9 +12,14 @@ class Activity < ApplicationRecord
   validates :title, presence: true,
                     format: { without: /[<>{}\[\]|\\^~]/, message: "cannot contain special characters" },
                     length: { minimum: 8, maximum: 100 }
+
+  DESCRIPTION_MIN_LENGTH = Activities::BusinessRules::DescriptionLengthRule::MIN_LENGTH
+  DESCRIPTION_MAX_LENGTH = Activities::BusinessRules::DescriptionLengthRule::MAX_LENGTH
+
   validates :description, presence: true,
                           format: { without: /[<>{}\[\]|\\^~]/, message: "cannot contain special characters" },
-                          length: { minimum: 20, maximum: 300 }
+                          length: { minimum: DESCRIPTION_MIN_LENGTH,
+                                    maximum: DESCRIPTION_MAX_LENGTH }
   validates :location, presence: true,
                        format: { without: /[<>{}\[\]|\\^~]/, message: "cannot contain special characters" },
                        length: { minimum: 4, maximum: 100 }
