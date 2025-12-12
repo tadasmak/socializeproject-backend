@@ -44,7 +44,11 @@ class Api::V1::ActivitiesController < ApplicationController
   end
 
   def update
-    @activity.update!(activity_params)
+    attrs = activity_params.to_h
+    type_name = attrs.delete("activity_type_name")
+    activity_type = ActivityType.find_by!(name: type_name)
+
+    @activity.update!(attrs.merge(activity_type:))
     Activities::StatusManager.new(@activity).sync_status
 
     render status: :ok, json: @activity
